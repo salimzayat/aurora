@@ -1,0 +1,86 @@
+<EventManager>
+    <!--
+        Folder to store persisted events (events that are still within max retry
+        count when system is shutdown.
+    -->
+    <PersistentFolder>./dbsync/temp/event_manager/appl/persist</PersistentFolder>
+    <!--
+       Folder to store error events (events that could not be completed
+       successfully by a listener, and exceed the max retry count.)
+       This folder must be different from the persistence folder above.
+    -->
+    <ErrorEventFolder>./dbsync/temp/event_manager/appl/error</ErrorEventFolder>
+    <!--
+       Folder to store successful events.
+       This folder must be different from the folder above.
+    -->
+    <SuccessEventFolder>./dbsync/temp/event_manager/appl/success</SuccessEventFolder>
+    <!--
+        The max number of retries the system will notify a listener before
+        the listener can successfully complete the event.
+    -->
+    <MaxRetry>1</MaxRetry>
+    <!--
+        Retry interval in seconds.
+        if set to 0 or a negative number, will NEVER retry
+    -->
+    <RetryInverval>60</RetryInverval>
+    <!--
+        Whether to start the retry thread on manager startup. default is false.
+    -->
+    <StartRetryOnInit>true</StartRetryOnInit>
+
+    <Destinations>
+        <!--
+        Attributes for a Destination
+            name:
+                the name of the destination.
+            persistOnError:
+                whether to persist to file if an error occurs. default is true.
+            persistOnSuccess:
+                whether to persist to file if an event is listened successfully. default is false.
+            serial:
+                when true, an event will NOT be sent to a listner upon firing. instead, it will be first
+                persisted to file, and wait for the Retrier to pick up. The Retrier is generally singled-threaded,
+                hence these events will be listened to serially. default is false.
+        -->
+
+        <!-- Asynchronous email sending -->
+        <!--
+        <Destination name="Email">
+            <Listener name="Email" className="com.dbsync.framework.mail.MailEventListener" />
+        </Destination>
+
+ 
+
+        <Destination name="SalesForce">
+            <Listener name="SalesForce" className="com.avankia.salesforce.SalesForceListener" />
+        </Destination>
+        -->
+
+
+<!-- to see what is the ones below used for -->
+<!--
+        <Destination name="Replication">
+            <Listener name="Replication" className="com.dbsync.salesforce.event.ReplicationEventListener" />
+        </Destination>
+        <Destination name="SyncReportQueue">
+            <Listener name="SyncReportQueue" className="com.dbsync.salesforce.event.SyncReportEventListener" />
+        </Destination>
+
+        <Destination name="SyncErrorMapQueue">
+            <Listener name="SyncErrorMapQueue" className="com.dbsync.salesforce.event.SyncErrorMapEventListener" />
+        </Destination>
+-->
+        <Destination name="WebNotificationQueue" serial="true" persistOnError="true">
+            <Listener name="WebNotificationQueue" className="com.dbsync.salesforce.event.WebNotificationEventListener" />
+        </Destination>
+
+
+
+		<Destination name="LocalReplication">
+            <Listener name="LocalReplication" className="com.dbsync.salesforce.event.LocalReplicationEventListener" />
+        </Destination>
+        
+    </Destinations>
+</EventManager>

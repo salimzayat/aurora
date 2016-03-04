@@ -1,0 +1,6 @@
+---
+#=====================#
+### DBSync SETTINGS ###
+#=====================#
+dbsync_install_directory: '/usr/local'
+dbsync_artifact_directory: '/vagrant/deploy/roles/dbsync/artifacts'

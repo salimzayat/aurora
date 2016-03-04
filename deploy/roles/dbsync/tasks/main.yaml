@@ -1,0 +1,36 @@
+---
+- name: Verify install directory
+  file:
+    path: "{{dbsync_install_directory}}/"
+    state: directory
+
+- name: Untar the tarball
+  unarchive:
+    src: "{{dbsync_artifact_directory}}/DBSync_CloudReplication_V4.5.zip"
+    dest: "{{dbsync_install_directory}}/"
+
+- name: Change the event manager directory
+  template:
+    src: EventManagerConfig.xml
+    dest: "{{dbsync_install_directory}}/dbsync-repl-tomcat-8.0.30/dbsync-repl/WEB-INF/db/conf/EventManagerConfig.xml"
+
+- name: Chmod all the scripts
+  file:
+#    state: touch
+    mode: a+x
+    path: "{{dbsync_install_directory}}/dbsync-repl-tomcat-8.0.30/bin/{{item}}"
+  with_items:
+    - catalina.sh
+    - configtest.sh
+    - daemon.sh
+    - digest.sh
+    - setclasspath.sh
+    - shutdown.sh
+    - startup.sh
+    - tool-wrapper.sh
+    - version.sh
+
+- name: Start DBSync
+  command: "{{dbsync_install_directory}}/dbsync-repl-tomcat-8.0.30/bin/catalina.sh start"
+
+

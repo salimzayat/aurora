@@ -1,0 +1,26 @@
+---
+- name: Install all packages
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - tomcat6
+    - tomcat6-webapps
+    - tomcat6-admin-webapps
+    - libselinux-python
+
+- name: Edit the tomcat.conf file
+  template:
+    dest: /usr/share/tomcat6/conf/tomcat6.conf
+    src: tomcat6.conf
+
+- name: Update tomcat roles
+  template:
+    src: tomcat-users.xml
+    dest: /usr/share/tomcat6/conf/tomcat-users.xml
+
+- name: Start tomcat
+  service:
+    name: tomcat6
+    state: started
+

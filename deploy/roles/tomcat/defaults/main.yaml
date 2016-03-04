@@ -1,0 +1,7 @@
+---
+tomcat_users:
+  - {
+    name: 'admin',
+    password: 'password',
+    roles: 'manager,admin'
+  }

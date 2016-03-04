@@ -1,0 +1,7 @@
+# deploy_dbsync.yml
+---
+- hosts: dbsync_servers
+  sudo: yes
+  roles:
+    - role: tomcat
+    - role: dbsync
